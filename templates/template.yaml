@@ -39,4 +39,4 @@ Resources:
           !Sub |
             #!/bin/bash -xe
             yum install -y aws-cfn-bootstrap
-            /opt/bin/aws/cfn-init -s ${AWS::StackId} -r webserver --region ${AWS::Region} -v
+            /opt/aws/bin/cfn-init -s ${AWS::StackId} -r webserver --region ${AWS::Region} -v
