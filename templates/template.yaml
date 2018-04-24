@@ -1,4 +1,32 @@
 Resources:
+
+  loadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: security group for the load balancer
+      SecurityGroupIngress:
+        -
+          IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: 80
+          ToPort: 80
+
+
+  loadBalancer:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      Subnets:
+        - subnet-36609151
+        - subnet-70120614
+      SecurityGroups:
+        - !Ref ${loadBalancerSecurityGroup.GroupId}
+      Listeners:
+        -
+          InstancePort: 80
+          LoadBalancerPort: 80
+          Protocol: HTTP
+
+
   securityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -6,7 +34,7 @@ Resources:
       SecurityGroupIngress:
         -
           IpProtocol: tcp
-          CidrIp: 0.0.0.0/0
+          SourceSecurityGroupId: !Sub ${loadBalancerSecurityGroup.GroupId}
           FromPort: 80
           ToPort: 80
 
