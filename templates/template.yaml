@@ -14,8 +14,8 @@ Resources:
           FromPort: 80
           ToPort: 80
 
-  webserver:
-    Type: AWS::EC2::Instance
+  launchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
     Metadata:
       AWS::CloudFormation::Init:
         config:
@@ -33,10 +33,10 @@ Resources:
        ImageId: ami-64260718
        InstanceType: m4.large
        SecurityGroups:
-         - !Ref securityGroup
+         - !Sub ${securityGroup.GroupId}
        UserData:
         Fn::Base64:
           !Sub |
             #!/bin/bash -xe
             yum install -y aws-cfn-bootstrap
-            /opt/aws/bin/cfn-init -s ${AWS::StackId} -r webserver --region ${AWS::Region} -v
+            /opt/aws/bin/cfn-init -s ${AWS::StackId} -r launchConfiguration --region ${AWS::Region} -v
