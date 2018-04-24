@@ -42,6 +42,8 @@ Resources:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
       LaunchConfigurationName: !Ref launchConfiguration
+      LoadBalancerNames:
+        - !Ref loadBalancer
       MaxSize: 2
       MinSize: 1
       VPCZoneIdentifier:
