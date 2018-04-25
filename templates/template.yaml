@@ -19,7 +19,7 @@ Resources:
         - subnet-36609151
         - subnet-70120614
       SecurityGroups:
-        - !Ref ${loadBalancerSecurityGroup.GroupId}
+        - !Sub ${loadBalancerSecurityGroup.GroupId}
       Listeners:
         -
           InstancePort: 80
