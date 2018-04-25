@@ -17,7 +17,6 @@ Resources:
     Properties:
       Subnets:
         - subnet-36609151
-        - subnet-70120614
       SecurityGroups:
         - !Sub ${loadBalancerSecurityGroup.GroupId}
       Listeners:
