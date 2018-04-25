@@ -1,5 +1,9 @@
-Resources:
+Outputs:
+  LoadBalancerDNSName:
+    Value: !Sub ${loadBalancer.DNSName}
 
+
+Resources:
   loadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -10,7 +14,6 @@ Resources:
           CidrIp: 0.0.0.0/0
           FromPort: 80
           ToPort: 80
-
 
   loadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
@@ -24,7 +27,6 @@ Resources:
           InstancePort: 80
           LoadBalancerPort: 80
           Protocol: HTTP
-
 
   securityGroup:
     Type: AWS::EC2::SecurityGroup
