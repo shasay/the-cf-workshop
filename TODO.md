@@ -1,6 +1,7 @@
-- Document the service role required for AWS CodePipeline
-- Implement service role creation required for AWS CodePipeline
-- Change templates to use fine-grained privileges
-- Rename mapping
-- add .json version of templates
-
+- [ ] Change templates to use fine-grained privileges
+- [ ] Rename mapping
+- [ ] add .json version of templates
+- [ ] Optionally, provide a simpler template for webapp (w/o `AWS::CloudFormation::Init`)
+- [ ] Add `NoEcho` for the personal access token in the pipeline template
+- [x] Document the service role required for AWS CodePipeline
+- [x] Implement service role creation required for AWS CodePipeline
