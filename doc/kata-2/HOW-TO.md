@@ -12,7 +12,7 @@ $ git commit -m "Adding template from first kata"
 - Create a repository on your account on github.com and 
     - Add it as a `remote` to your local repository
     - Push your local changes to the `remote`
-    - [Obtain a personal access token](personal_access_token.md)
+    - [Obtain a personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
 
 ```
 # Add a remote pointing to the upstream repository on github.com
