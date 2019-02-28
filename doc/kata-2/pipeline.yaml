@@ -24,6 +24,7 @@ Parameters:
   GithubAccessToken:
     Description: Personal access token generated for Github
     Type: String
+    NoEcho: true
   BranchName:
     Description: The branch in version control to retrieve changes from
     Type: String
