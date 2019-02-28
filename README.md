@@ -7,13 +7,11 @@ The workshop is structured as a series of *code katas* (see "https://en.wikipedi
 
 Pre-requisites
 ====
-- an account on Github
-- `git` version control client
-- AWS account
-- [AWS CLI](https://aws.amazon.com/cli/) installed and configured with credentials privileged to operate upon CloudFormation and EC2 resources, etc. Specifically: 
-    - the user should either have privileges to provision the resources in the stack, OR 
-    - alternatively, the user should be able to `iam:PassRole` a role that gives CloudFormation the privileges to provision the resources in the stack   
+- an account on Github and the `git` version control client
 - text editor to edit YAML and JSON files
+- AWS account and [AWS CLI](https://aws.amazon.com/cli/) installed and configured with credentials privileged to operate upon CloudFormation and EC2 resources, etc. Specifically: 
+    - the user should either have privileges to provision the resources in a stack, OR 
+    - alternatively, the user should be able to `iam:PassRole` a role that gives CloudFormation the privileges to provision the resources in a stack   
 - You can verify the AWS CLI is installed and configured correctly with credentials as follows (output will be similar to the below):
 
 ```
