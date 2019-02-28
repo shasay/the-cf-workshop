@@ -39,7 +39,7 @@ Cleaning up afterwards!
     - Deleting a CloudFormation stack deletes all resources provisioned by the stack
 - If you provision any pipelines to deploy other CloudFormation stacks, remember to:
     - IMPORTANT!!! delete the stack provisioned by the pipeline _first_ 
-    - only delete the pipeline (or the stack that provisioned the pipeline) afterwards. The stack provisioned by the pipeline depends upon IAM roles provisioned by the pipeline, and may be left orphaned if the pipeline is deleted first. 
+    - only delete the pipeline (i.e., the stack that provisioned the pipeline) afterwards. The stack provisioned by the pipeline depends upon IAM roles provisioned by the pipeline, and may be left orphaned if the pipeline is deleted first. 
     - [ ] TODO: configure the pipelines to provision stacks with `termination-protection` enabled.
 
 Organisation
