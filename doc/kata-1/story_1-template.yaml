@@ -1,33 +1,30 @@
-Description: Deploys a single webserver instance (has an AMI for Amazon Linux 2 in eu-west-1 available as of Feb 27, 2019)
-
 Resources:
   securityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: access web application
+      GroupDescription: Allow HTTP traffic
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          CidrIp: 0.0.0.0/0
-          FromPort: 80
-          ToPort: 80
+      - CidrIp: 0.0.0.0/0
+        IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
 
-  webServer:
+  webserver:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-0838da7c1467f590c
-      InstanceType: t2.micro
       SecurityGroups:
         - !Ref securityGroup
       Tags:
         - Key: Name
-          Value: cf-workshop
+          Value: the-cf-workshop
       UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash -xe
-            yum install httpd -y
-            service httpd start
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          yum install httpd -y
+          service httpd start
 
 Outputs:
-  webserverIpAddress:
-    Value: !Sub ${webServer.PublicIp}
+  webserverIp:
+    Description: IP address that the webserver is listening on
+    Value: !GetAtt webserver.PublicIp
