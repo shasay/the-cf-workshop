@@ -5,6 +5,11 @@
     // replace with the name of the repository on Github containing the templates to deploy
   },
   {
+    "ParameterKey": "StackNameSuffix",
+    "ParameterValue": "TO-BE-REPLACED"
+    // replace with a value that will ensure your stack name is unique
+  },
+  {
     "ParameterKey": "RepositoryOwner",
     "ParameterValue": "TO-BE-REPLACED"
     // replace with the owner of the repository on Github containing the templates to deploy
@@ -18,15 +23,5 @@
     "ParameterKey": "NotifyEmail",
     "ParameterValue": "TO-BE-REPLACED"
     // replace with the email to be notified to seek approval to deploy changes
-  },
-  {
-    "ParameterKey": "PublicSubnetOneId",
-    "ParameterValue": "TO-BE-REPLACED"
-    // replace with a public subnet Id from one AZ
-  },
-  {
-    "ParameterKey": "PublicSubnetTwoId",
-    "ParameterValue": "TO-BE-REPLACED"
-    // replace with a public subnet Id from a different AZ
   }
 ]

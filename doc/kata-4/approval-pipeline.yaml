@@ -3,6 +3,16 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Creates a pipeline that executes a change set upon approval
 
 Parameters:
+  Environment:
+    Description: environment that this pipeline will be deploying resources into
+    Type: String
+    AllowedValues:
+      - dev
+      - live
+    Default: dev
+  StackNameSuffix:
+    Description: Provide a suffix to disambiguate the stack to be provisioned
+    Type: String
   RepositoryName:
     Description: The repository on Github to deploy from
     Type: String
@@ -25,19 +35,6 @@ Parameters:
   NotifyEmail:
     Description: The email address to notify for approval actions in the pipeline
     Type: String
-  PublicSubnetOneId:
-    Description: A public subnet Id to use for the load balancer
-    Type: AWS::EC2::Subnet::Id
-  PublicSubnetTwoId:
-    Description: A public subnet Id to use for the load balancer
-    Type: AWS::EC2::Subnet::Id
-  Environment:
-    Description: Environment that the application is being deployed to
-    Type: String
-    AllowedValues:
-      - dev
-      - live
-    Default: live
 
 Resources:
   ArtifactStoreBucket:
@@ -61,7 +58,7 @@ Resources:
         Location: !Ref 'ArtifactStoreBucket'
         Type: S3
       DisableInboundStageTransitions: []
-      Name: !Sub "${ApplicationName}-${BranchName}"
+      Name: !Sub "${ApplicationName}-${StackNameSuffix}-${Environment}"
       RoleArn: !GetAtt [PipelineRole, Arn]
       Stages:
         - Name: Source
@@ -94,14 +91,12 @@ Resources:
               Configuration:
                 ActionMode: CHANGE_SET_REPLACE
                 RoleArn: !Sub ${CFNRole.Arn}
-                StackName: !Sub "${ApplicationName}-${BranchName}"
-                ChangeSetName: master
+                StackName: !Sub "${ApplicationName}-${Environment}-${StackNameSuffix}"
+                ChangeSetName: !Sub "${BranchName}"
                 TemplatePath: "TemplateSource::templates/template.yaml"
                 ParameterOverrides: !Sub |
                   {
-                    "Environment": "${Environment}",
-                    "PublicSubnetOneId": "${PublicSubnetOneId}",
-                    "PublicSubnetTwoId": "${PublicSubnetTwoId}"
+                    "Environment": "${Environment}"
                   }
               RunOrder: 1
 
@@ -113,7 +108,7 @@ Resources:
                 Version: 1
               Configuration:
                 NotificationArn: !Ref CodePipelineSNSTopic
-                CustomData: !Sub 'Please review the change set created against ${ApplicationName}-${BranchName} stack'
+                CustomData: !Sub 'Please review the change set created against ${ApplicationName}-${Environment}-${StackNameSuffix} stack'
               RunOrder: 2
 
             - Name: ExecuteChangeSet
@@ -124,7 +119,7 @@ Resources:
                 Version: 1
               Configuration:
                 ActionMode: CHANGE_SET_EXECUTE
-                StackName: !Sub "${ApplicationName}-${BranchName}"
+                StackName: !Sub "${ApplicationName}-${Environment}-${StackNameSuffix}"
                 ChangeSetName: master
                 RoleArn: !Sub ${CFNRole.Arn}
               RunOrder: 3

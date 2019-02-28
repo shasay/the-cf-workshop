@@ -5,7 +5,7 @@
   },
   {
     "ParameterKey": "StackNameSuffix",
-    "ParameterValue": "foo"
+    "ParameterValue": "TO-BE-REPLACED"
     // replace with a value that will ensure your stack name is unique
   },
   {
