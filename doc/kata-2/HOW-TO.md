@@ -10,7 +10,7 @@ Steps:
 - (if not already done) Create a repository on your account on github.com, and 
     - Add it as a "remote" to your local repository
     - Push your local changes on the `develop` branch on the remote
-    - Obtain a [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
+    - Obtain a [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line). Choose the scopes (at the top-level): `repo`, `admin:org`
 
 ```
 # Add a remote pointing to the upstream repository on github.com, push to the upstream remote
