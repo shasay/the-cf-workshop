@@ -1,0 +1,30 @@
+Resources:
+  securityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP traffic
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+
+  webserver:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0838da7c1467f590c
+      SecurityGroups:
+        - !Ref securityGroup
+      Tags:
+        - Key: Name
+          Value: the-cf-workshop
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          yum install httpd -y
+          service httpd start
+
+Outputs:
+  webserverIp:
+    Description: IP address that the webserver is listening on
+    Value: !GetAtt webserver.PublicIp
