@@ -50,7 +50,7 @@ Resources:
         Location: !Ref 'ArtifactStoreBucket'
         Type: S3
       DisableInboundStageTransitions: []
-      Name: !Sub "${ApplicationName}-${Environment}"
+      Name: !Sub "${ApplicationName}-${StackNameSuffix}-${Environment}"
       RoleArn: !GetAtt [PipelineRole, Arn]
       Stages:
         - Name: Source
