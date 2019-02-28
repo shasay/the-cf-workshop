@@ -6,11 +6,10 @@ Objectives:
 - Interpret the documentation to evolve stacks iteratively
 
 Steps:
-- Fork this repository into your account on github.com, then clone the same. 
-    - (Alternatively, clone this repository and push to a new repository on your own github.com account)
+- Fork this repository into your account on github.com, then clone the same. (Alternatively, clone this repository and push to a new repository on your own github.com account)
 - Refer to the [CloudFormation AWS Resource Types Reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
 - Create a first template (using either YAML or JSON formats). YAML is both more expressive, and less verbose; when compared to a similar template in JSON.
-- The `/templates` folder is not present on the `master` branch. This is where you will progress on the workshop when working on your own repository.
+- The `templates` folder is not present on the `master` branch. This is where you will progress on the workshop when working on your own repository.
 
 ```
 $ mkdir templates
@@ -25,8 +24,8 @@ $ touch templates/template.yaml
 
 ```
 # Choose a stack name. 
-# Choose a suffix, (say, `-foo`) to the stack-name, if multiple people are attempting to create stacks on the same account in the region
-
+# If multiple people are attempting to create stacks on the same account in one region
+#   append a suffix, (say, `-foo`) to the stack-name, 
 $ export DEV_STACK_NAME=webapp-dev-foo 
 
 # Create the stack (without a service role assigned)
@@ -34,8 +33,7 @@ $ aws cloudformation create-stack \
     --template-body file://templates/template.yaml \ 
     --stack-name ${DEV_STACK_NAME}   
     
-# (optional) You may choose to assign a service role
-# Create the stack (with a service role assigned)
+# (OPTIONAL) You may choose to assign a service role
 $ aws cloudformation create-stack \
     --template-body file://templates/template.yaml \
     --role-arn arn:aws:iam::<AWS-ACCOUNT-ID>:role/AWS-CloudFormation-ServiceRole \
@@ -68,11 +66,7 @@ $ aws cloudformation update-stack \
 $ aws cloudformation wait stack-update-complete \
     --stack-name ${DEV_STACK_NAME}   
 
-# Delete stack (if needed)
-$ aws cloudformation delete-stack \
-    --stack-name ${DEV_STACK_NAME}   
-
-```  
+```
 
 - Verify that the web server is running at the published IP address (available as a stack output)
 
@@ -81,6 +75,10 @@ $ aws cloudformation delete-stack \
 $ aws cloudformation describe-stacks \
     --query "Stacks[0].Outputs[0].OutputValue" \
     --output text \
+    --stack-name ${DEV_STACK_NAME}   
+
+# (OPTIONAL) You may now delete the stack
+$ aws cloudformation delete-stack \
     --stack-name ${DEV_STACK_NAME}   
 
 ```
