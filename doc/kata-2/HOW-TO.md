@@ -9,7 +9,7 @@ Pre-requisites:
 Steps:
 - (if not already done) Create a repository on your account on github.com, and 
     - Add it as a "remote" to your local repository
-    - Push your local changes on the `develop` branch to the remote
+    - Push your local changes on the `develop` branch on the remote
     - Obtain a [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
 
 ```
