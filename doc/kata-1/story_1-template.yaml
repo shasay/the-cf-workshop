@@ -1,45 +1,33 @@
-Description: Deploys a single webserver instance
+Description: Deploys a single webserver instance (has an AMI for Amazon Linux 2 in eu-west-1 available as of Feb 27, 2019)
 
 Resources:
-  webServer:
-    Type: AWS::EC2::Instance
-    Metadata:
-      AWS::CloudFormation::Init:
-        config:
-          packages:
-            yum:
-              httpd: []
-
-          services:
-            sysvinit:
-              httpd:
-                enabled: true
-                ensureRunning: true
-
-    Properties:
-      ImageId: ami-7c87d913
-      InstanceType: t2.micro
-      SecurityGroups:
-        - !Ref securityGroup
-      UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash -xe
-            yum install -y aws-cfn-bootstrap
-            /opt/aws/bin/cfn-init -s ${AWS::StackId} -r webServer --region ${AWS::Region} -v
-
   securityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: access web application
       SecurityGroupIngress:
-        -
-          IpProtocol: tcp
+        - IpProtocol: tcp
           CidrIp: 0.0.0.0/0
           FromPort: 80
           ToPort: 80
 
+  webServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0838da7c1467f590c
+      InstanceType: t2.micro
+      SecurityGroups:
+        - !Ref securityGroup
+      Tags:
+        - Key: Name
+          Value: cf-workshop
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash -xe
+            yum install httpd -y
+            service httpd start
 
 Outputs:
-  webserverIPAddress:
+  webserverIpAddress:
     Value: !Sub ${webServer.PublicIp}
