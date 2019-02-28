@@ -4,17 +4,6 @@ Description: >
   Creates a pipeline to deploy stack in CloudFormation off specified branch
 
 Parameters:
-  Environment:
-    Description: environment that this pipeline will be deploying resources into
-    Type: String
-    AllowedValues:
-      - dev
-      - live
-    Default: dev
-  StackNameSuffix:
-    Description: Provide a suffix to disambiguate the stack to be provisioned
-    Type: String
-    Default: ""
   RepositoryName:
     Description: The repository on Github to deploy from
     Type: String
@@ -31,9 +20,15 @@ Parameters:
     Default: develop
   ApplicationName:
     Description: >
-      The name of the application. This will be used in the name of the stack, and in the name of the pipeline
+      The name of the application. This will be used as part of the name of the stack, as well as the name of the pipeline
     Type: String
     Default: webapp
+  PublicSubnetOneId:
+    Description: A public subnet Id to use for the load balancer
+    Type: AWS::EC2::Subnet::Id
+  PublicSubnetTwoId:
+    Description: A public subnet Id to use for the load balancer
+    Type: AWS::EC2::Subnet::Id
 
 Resources:
   ArtifactStoreBucket:
@@ -50,7 +45,7 @@ Resources:
         Location: !Ref 'ArtifactStoreBucket'
         Type: S3
       DisableInboundStageTransitions: []
-      Name: !Sub "${ApplicationName}-${Environment}"
+      Name: !Sub "${ApplicationName}-${BranchName}"
       RoleArn: !GetAtt [PipelineRole, Arn]
       Stages:
         - Name: Source
@@ -83,8 +78,13 @@ Resources:
               Configuration:
                 ActionMode: REPLACE_ON_FAILURE
                 RoleArn: !Sub ${CFNRole.Arn}
-                StackName: !Sub "${ApplicationName}-${Environment}-${StackNameSuffix}"
+                StackName: !Sub "${ApplicationName}-${BranchName}"
                 TemplatePath: "TemplateSource::templates/template.yaml"
+                ParameterOverrides: !Sub |
+                  {
+                    "PublicSubnetOneId": "${PublicSubnetOneId}",
+                    "PublicSubnetTwoId": "${PublicSubnetTwoId}"
+                  }
 
 
   CFNRole:

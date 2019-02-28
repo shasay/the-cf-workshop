@@ -9,7 +9,7 @@ Steps:
 ```
 $ git add templates/template.yaml
 $ git commit -m "Story 3 (work-in-progress): my change"
-$ git push origin develop
+$ git push foo develop
 
 ```
 
