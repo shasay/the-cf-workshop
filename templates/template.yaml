@@ -1,79 +1,32 @@
-Outputs:
-  LoadBalancerDNSName:
-    Value: !Sub ${loadBalancer.DNSName}
-
-
 Resources:
-  loadBalancerSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: security group for the load balancer
-      SecurityGroupIngress:
-        -
-          IpProtocol: tcp
-          CidrIp: 0.0.0.0/0
-          FromPort: 80
-          ToPort: 80
-
-  loadBalancer:
-    Type: AWS::ElasticLoadBalancing::LoadBalancer
-    Properties:
-      Subnets:
-        - subnet-36609151
-      SecurityGroups:
-        - !Sub ${loadBalancerSecurityGroup.GroupId}
-      Listeners:
-        -
-          InstancePort: 80
-          LoadBalancerPort: 80
-          Protocol: HTTP
-
   securityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: security group for webserver
+      GroupDescription: Allow HTTP traffic
       SecurityGroupIngress:
-        -
-          IpProtocol: tcp
-          SourceSecurityGroupId: !Sub ${loadBalancerSecurityGroup.GroupId}
-          FromPort: 80
-          ToPort: 80
+      - CidrIp: 0.0.0.0/0
+        IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
 
-  autoScalingGroup:
-    Type: AWS::AutoScaling::AutoScalingGroup
+  webserver:
+    Type: AWS::EC2::Instance
     Properties:
-      LaunchConfigurationName: !Ref launchConfiguration
-      LoadBalancerNames:
-        - !Ref loadBalancer
-      MaxSize: 2
-      MinSize: 1
-      VPCZoneIdentifier:
-        - subnet-36609151
-        - subnet-70120614
+      ImageId: ami-0fad73708adf284ce
+      SecurityGroups:
+        - !Ref securityGroup
+      Tags:
+        - Key: Name
+          Value: cf-workshop-kata-1
+        - Key: Contact
+          Value: manik  
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          yum install httpd -y
+          service httpd start
 
-  launchConfiguration:
-    Type: AWS::AutoScaling::LaunchConfiguration
-    Metadata:
-      AWS::CloudFormation::Init:
-        config:
-          packages:
-            yum:
-              httpd: []
-
-          services:
-            sysvinit:
-              httpd:
-                enabled: true
-                ensureRunning: true
-
-    Properties:
-       ImageId: ami-64260718
-       InstanceType: m4.large
-       SecurityGroups:
-         - !Sub ${securityGroup.GroupId}
-       UserData:
-        Fn::Base64:
-          !Sub |
-            #!/bin/bash -xe
-            yum install -y aws-cfn-bootstrap
-            /opt/aws/bin/cfn-init -s ${AWS::StackId} -r launchConfiguration --region ${AWS::Region} -v
+Outputs:
+  webserverIp:
+    Description: IP address that the webserver is listening on
+    Value: !GetAtt webserver.PublicIp

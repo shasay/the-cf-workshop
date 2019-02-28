@@ -1,5 +1,13 @@
 [
   {
+    "ParameterKey": "Environment",
+    "ParameterValue": "dev"
+  },
+  {
+    "ParameterKey": "StackNameSuffix",
+    "ParameterValue": ""
+  },
+  {
     "ParameterKey": "RepositoryName",
     "ParameterValue": "TO-BE-REPLACED"
     // replace with the name of the repository on Github containing the templates to deploy
